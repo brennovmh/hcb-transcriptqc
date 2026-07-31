@@ -1,0 +1,80 @@
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Nextflow
+.nextflow/
+.nextflow.log*
+work/
+results/
+real_data/results*/
+*.nextflow.log
+
+# FASTQ/FASTA e arquivos de alinhamento — não versionar dados brutos
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.fasta
+*.fa
+*.fa.gz
+*.fai
+*.dict
+*.bam
+*.bam.bai
+*.bai
+*.cram
+*.crai
+
+# Índices e referências pesadas
+references/star_*/
+references/*index*/
+references/*.gtf
+references/*.gtf.gz
+references/*.refFlat.txt
+real_data/references/*.fa*
+real_data/references/*.fasta*
+real_data/references/*.gtf*
+real_data/references/*.refFlat*
+
+# Relatórios e artefatos de execução
+*.html
+*.zip
+*.tar
+*.tar.gz
+*.log
+*.tmp
+*.pkl
+*.pickle
+*.rds
+*.RData
+
+# Caches de Python e ferramentas
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.venv/
+venv/
+
+# Dados reais: manter apenas metadados e referências pequenas/autorizadas
+real_data/*/
+!real_data/samplesheet_*.csv
+!real_data/references/
+!real_data/references/*.bed
+!real_data/references/*.txt
+!real_data/references/*.chain.gz
+
+# Fixtures pequenos de teste podem ser versionados explicitamente
+!tests/data/
+!tests/data/**
+

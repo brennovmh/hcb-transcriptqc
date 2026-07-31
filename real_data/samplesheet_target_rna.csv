@@ -1,0 +1,2 @@
+sample,fastq_1,fastq_2,group,batch,assay
+1565BM1,real_data/target-RNA/1565BM1_S1_L001_R1_001.fastq.gz,real_data/target-RNA/1565BM1_S1_L001_R2_001.fastq.gz,real,L001,panel

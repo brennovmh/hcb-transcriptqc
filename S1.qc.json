@@ -1,0 +1,65 @@
+{
+  "sample": "S1",
+  "assay": "panel",
+  "batch": "b1",
+  "overall_status": "WARNING",
+  "classification_assay_type": "panel_hybrid_capture",
+  "metrics": {
+    "total_read_pairs": {
+      "value": 6000000,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 5000000,
+      "threshold_fail": 2000000,
+      "critical": true
+    },
+    "on_target_percent": {
+      "value": 90,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 70,
+      "threshold_fail": 50,
+      "critical": true
+    },
+    "median_target_depth": {
+      "value": 1000,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 500,
+      "threshold_fail": 100,
+      "critical": true
+    },
+    "housekeeping_detected_percent": {
+      "value": 100,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 95,
+      "threshold_fail": 80,
+      "critical": true
+    },
+    "targets_covered_100x_percent": {
+      "value": 95,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 90,
+      "threshold_fail": 75,
+      "critical": true
+    },
+    "duplication_percent": {
+      "value": 70,
+      "unit": "%",
+      "status": "WARNING",
+      "threshold_warning": 60,
+      "threshold_fail": 80,
+      "critical": false
+    }
+  },
+  "warnings": [
+    "duplication_percent"
+  ],
+  "failures": [],
+  "not_evaluated": [],
+  "justification": "duplication_percent",
+  "software_versions": {},
+  "execution_date": "2026-07-31"
+}
