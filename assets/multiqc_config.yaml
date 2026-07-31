@@ -1,0 +1,5 @@
+title: "rna-qc MultiQC"
+report_comment: "Technical QC summary for RNA-seq and targeted RNA assays"
+custom_content:
+  order:
+    - rna_qc_summary

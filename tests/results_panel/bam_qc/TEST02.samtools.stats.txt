@@ -1,0 +1,4 @@
+SN	raw total sequences:	200
+SN	average length:	101
+SN	insert size average:	250
+SN	insert size standard deviation:	20

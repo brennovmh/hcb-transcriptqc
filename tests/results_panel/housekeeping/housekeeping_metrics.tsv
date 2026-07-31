@@ -1,0 +1,4 @@
+sample	housekeeping_expected	housekeeping_detected	housekeeping_detected_percent	housekeeping_mean_count	housekeeping_median_count	housekeeping_min_count	housekeeping_max_count	housekeeping_mean_cpm	housekeeping_below_limit	housekeeping_cv	housekeeping_iqr	housekeeping_outlier	batch	housekeeping_sample_zscore
+TEST02	10	3	30.0	76.667	80.0	50.0	100.0	333333.333	0	0.268018	25.0	NO	batch1	0.0
+TEST01	10	3	30.0	76.667	80.0	50.0	100.0	333333.333	0	0.268018	25.0	NO	batch1	0.0
+TEST03	10	3	30.0	76.667	80.0	50.0	100.0	333333.333	0	0.268018	25.0	NO	batch1	0.0

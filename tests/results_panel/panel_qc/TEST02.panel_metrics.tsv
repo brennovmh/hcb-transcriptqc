@@ -1,0 +1,2 @@
+sample	panel_type	on_target_percent	median_target_depth	mean_target_depth	targets_covered_20x_percent	targets_covered_50x_percent	targets_covered_100x_percent	targets_covered_500x_percent	targets_covered_1000x_percent	targets_without_coverage
+TEST02	hybrid_capture	90	800	850	100	100	95	80	70	0

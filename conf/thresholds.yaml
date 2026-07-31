@@ -1,0 +1,100 @@
+transcriptome:
+  total_read_pairs:
+    direction: minimum
+    warning: 20000000
+    fail: 10000000
+    critical: true
+  q30_percent:
+    direction: minimum
+    warning: 85
+    fail: 75
+  uniquely_mapped_percent:
+    direction: minimum
+    warning: 80
+    fail: 70
+    critical: true
+  exonic_percent:
+    direction: minimum
+    warning: 60
+    fail: 40
+    critical: true
+  rrna_percent:
+    direction: maximum
+    warning: 10
+    fail: 20
+  duplication_percent:
+    direction: maximum
+    warning: 50
+    fail: 70
+  housekeeping_detected_percent:
+    direction: minimum
+    warning: 90
+    fail: 75
+    critical: true
+  detected_genes_cpm1:
+    direction: minimum
+    warning: 12000
+    fail: 8000
+  median_tin:
+    direction: minimum
+    warning: 50
+    fail: 30
+  chimeric_reads_percent:
+    direction: informational
+    critical: false
+
+panel_hybrid_capture:
+  total_read_pairs:
+    direction: minimum
+    warning: 5000000
+    fail: 2000000
+    critical: true
+  on_target_percent:
+    direction: minimum
+    warning: 70
+    fail: 50
+    critical: true
+  median_target_depth:
+    direction: minimum
+    warning: 500
+    fail: 100
+    critical: true
+  housekeeping_detected_percent:
+    direction: minimum
+    warning: 95
+    fail: 80
+    critical: true
+  targets_covered_100x_percent:
+    direction: minimum
+    warning: 90
+    fail: 75
+    critical: true
+  duplication_percent:
+    direction: maximum
+    warning: 60
+    fail: 80
+
+panel_amplicon:
+  total_read_pairs:
+    direction: minimum
+    warning: 1000000
+    fail: 500000
+    critical: true
+  on_target_percent:
+    direction: minimum
+    warning: 80
+    fail: 60
+    critical: true
+  median_target_depth:
+    direction: minimum
+    warning: 1000
+    fail: 200
+    critical: true
+  housekeeping_detected_percent:
+    direction: minimum
+    warning: 95
+    fail: 80
+    critical: true
+  duplication_percent:
+    direction: informational
+    critical: false

@@ -1,0 +1,2 @@
+sample	paired_end	read_length	insert_size_mean	chimeric_reads	chimeric_reads_percent	junction_saturation	fusion_readiness_status
+TEST03	YES	101	250	10	0.01	0.8	PASS

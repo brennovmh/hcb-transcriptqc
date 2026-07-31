@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-labelledby="title desc">
+  <title id="title">RNA-QC</title>
+  <desc id="desc">Fita de RNA e pontos de controle de qualidade</desc>
+  <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs>
+  <rect width="360" height="180" rx="28" fill="#f0fdfa"/>
+  <path d="M42 45c42 0 42 90 84 90s42-90 84-90 42 90 84 90" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M42 135c42 0 42-90 84-90s42 90 84 90 42-90 84-90" fill="none" stroke="#115e59" stroke-width="5" stroke-dasharray="10 12" stroke-linecap="round" opacity=".8"/>
+  <circle cx="42" cy="45" r="10" fill="#f59e0b"/><circle cx="126" cy="135" r="10" fill="#f59e0b"/><circle cx="210" cy="45" r="10" fill="#f59e0b"/><circle cx="294" cy="135" r="10" fill="#f59e0b"/>
+  <text x="180" y="166" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#134e4a" letter-spacing="4">RNA-QC</text>
+</svg>

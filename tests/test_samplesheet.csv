@@ -1,0 +1,4 @@
+sample,bam,group,batch,assay
+TEST01,tests/data/TEST01.bam,grp1,batch1,transcriptome
+TEST02,tests/data/TEST02.bam,grp1,batch1,transcriptome
+TEST03,tests/data/TEST03.bam,grp1,batch1,transcriptome

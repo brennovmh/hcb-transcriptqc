@@ -1,0 +1,4 @@
+sample	assay	batch	overall_status	total_read_pairs	on_target_percent	median_target_depth	housekeeping_detected_percent	targets_covered_100x_percent	duplication_percent
+TEST01	panel		FAIL	NA	90.0	800.0	30.0	95.0	12.0
+TEST02	panel		FAIL	NA	90.0	800.0	30.0	95.0	12.0
+TEST03	panel		FAIL	NA	90.0	800.0	30.0	95.0	12.0

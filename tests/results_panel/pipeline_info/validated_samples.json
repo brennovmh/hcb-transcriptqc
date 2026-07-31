@@ -1,0 +1,25 @@
+{
+  "samples": [
+    {
+      "sample": "TEST01",
+      "bam": "tests/data/TEST01.bam",
+      "group": "grp1",
+      "batch": "batch1",
+      "assay": "panel"
+    },
+    {
+      "sample": "TEST02",
+      "bam": "tests/data/TEST02.bam",
+      "group": "grp1",
+      "batch": "batch1",
+      "assay": "panel"
+    },
+    {
+      "sample": "TEST03",
+      "bam": "tests/data/TEST03.bam",
+      "group": "grp1",
+      "batch": "batch1",
+      "assay": "panel"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "sample": "TEST01",
+  "assay": "panel",
+  "batch": "",
+  "overall_status": "FAIL",
+  "classification_assay_type": "panel_hybrid_capture",
+  "metrics": {
+    "total_read_pairs": {
+      "value": "NA",
+      "unit": "%",
+      "status": "NOT_EVALUATED",
+      "threshold_warning": 5000000,
+      "threshold_fail": 2000000,
+      "critical": true
+    },
+    "on_target_percent": {
+      "value": 90.0,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 70,
+      "threshold_fail": 50,
+      "critical": true
+    },
+    "median_target_depth": {
+      "value": 800.0,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 500,
+      "threshold_fail": 100,
+      "critical": true
+    },
+    "housekeeping_detected_percent": {
+      "value": 30.0,
+      "unit": "%",
+      "status": "FAIL",
+      "threshold_warning": 95,
+      "threshold_fail": 80,
+      "critical": true
+    },
+    "targets_covered_100x_percent": {
+      "value": 95.0,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 90,
+      "threshold_fail": 75,
+      "critical": true
+    },
+    "duplication_percent": {
+      "value": 12.0,
+      "unit": "%",
+      "status": "PASS",
+      "threshold_warning": 60,
+      "threshold_fail": 80,
+      "critical": false
+    }
+  },
+  "warnings": [],
+  "failures": [
+    "housekeeping_detected_percent"
+  ],
+  "not_evaluated": [
+    "total_read_pairs"
+  ],
+  "justification": "housekeeping_detected_percent",
+  "software_versions": {},
+  "execution_date": "2026-07-30"
+}

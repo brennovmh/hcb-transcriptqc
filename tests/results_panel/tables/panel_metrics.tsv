@@ -1,0 +1,4 @@
+sample	on_target_percent	median_target_depth	targets_covered_100x_percent
+TEST01	90.0	800.0	95.0
+TEST02	90.0	800.0	95.0
+TEST03	90.0	800.0	95.0

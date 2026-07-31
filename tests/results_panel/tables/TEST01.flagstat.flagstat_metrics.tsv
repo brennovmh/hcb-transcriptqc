@@ -1,0 +1,2 @@
+sample	reads_total_flagstat	properly_paired_percent	secondary_reads_percent	supplementary_reads_percent
+TEST01	200	85.0	5.0	2.5

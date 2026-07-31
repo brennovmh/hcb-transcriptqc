@@ -1,0 +1,4 @@
+sample	total_counts	detected_genes_counts1	detected_genes_counts10	detected_genes_cpm1	detected_genes_tpm1	assigned_reads_percent	unassigned_reads_percent	ambiguous_reads_percent	multimapping_reads_percent	top10_expression_percent	top100_expression_percent	expression_entropy
+TEST02	230.0	3	3	3	NA	93.878	6.122	2.041	0.0	100.0	100.0	1.531
+TEST01	230.0	3	3	3	NA	93.878	6.122	2.041	0.0	100.0	100.0	1.531
+TEST03	230.0	3	3	3	NA	93.878	6.122	2.041	0.0	100.0	100.0	1.531

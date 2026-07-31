@@ -1,0 +1,5 @@
+custom_data:
+  rna_qc_summary:
+    id: "rna_qc_summary"
+    section_name: "RNA QC Summary"
+    description: "Combined sample-level QC classification."
