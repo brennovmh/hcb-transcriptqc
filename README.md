@@ -3,7 +3,7 @@
 <p align="center"><img src="assets/rna-qc-logo.svg" width="180" alt="RNA-QC logo"></p>
 <p align="center"><strong>Reproducible technical QC for RNA-seq, WTS, and targeted RNA panels.</strong></p>
 
-<p align="center"><img alt="Nextflow DSL2" src="https://img.shields.io/badge/Nextflow-DSL2-0f766e"> <img alt="Docker" src="https://img.shields.io/badge/containers-Docker-2496ed"> <img alt="Status" src="https://img.shields.io/badge/status-MVP%20em%20validação-f59e0b"></p>
+<p align="center"><img alt="Nextflow DSL2" src="https://img.shields.io/badge/Nextflow-DSL2-0f766e"> <img alt="Docker" src="https://img.shields.io/badge/containers-Docker-2496ed">
 
 ## Overview
 
