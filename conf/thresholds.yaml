@@ -56,7 +56,7 @@ panel_hybrid_capture:
     critical: true
   median_target_depth:
     direction: minimum
-    warning: 500
+    warning: 300
     fail: 100
     critical: true
   housekeeping_detected_percent:

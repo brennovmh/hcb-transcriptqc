@@ -1,107 +1,48 @@
 # Transcript-QC
 
+<<<<<<< HEAD
 <p align="center"><img src="assets/rna-qc-logo.svg" width="180" alt="RNA-QC logo"></p>
 <p align="center"><strong>Reproducible technical QC for RNA-seq, WTS, and targeted RNA panels.</strong></p>
 
 <p align="center"><img alt="Nextflow DSL2" src="https://img.shields.io/badge/Nextflow-DSL2-0f766e"> <img alt="Docker" src="https://img.shields.io/badge/containers-Docker-2496ed">
+=======
+Reproducible technical QC for RNA-seq, WTS, and targeted RNA panels.
+>>>>>>> 0690150 (Improve QC reports, thresholds, and reproducibility)
 
 ## Overview
 
-`rna-qc` is a Nextflow DSL2 pipeline for assessing RNA sample technical quality before differential expression, fusion analysis, or biological interpretation.
+`rna-qc` is a Nextflow DSL2 pipeline for technical quality assessment before downstream expression or fusion analysis. It supports paired-end FASTQ and BAM input, transcriptomes, hybrid-capture panels, and amplicon panels.
 
-It supports paired-end FASTQ or BAM, bulk/WTS transcriptomes, targeted RNA panels, hybrid capture, and amplicons. Each sample receives `PASS`, `WARNING`, `FAIL`, or `NOT_EVALUATED`, together with HTML/JSON reports, TSV tables, MultiQC, and provenance.
+Each sample receives `PASS`, `WARNING`, `FAIL`, or `NOT_EVALUATED`, plus HTML/JSON reports, TSV tables, MultiQC output, and execution provenance.
 
-The pipeline does not call fusions, perform differential expression, or provide clinical interpretation. `fusion readiness` measures technical suitability for a downstream analysis only.
+The standalone HTML reports are available in English and Brazilian Portuguese. Each metric includes a compact horizontal bar, the observed value, the applicable warning/failure threshold, and a plain-language explanation when the metric is outside its limit.
 
-## Current status
-
-- prepared GRCh38 STAR index;
-- real-data profiles for WTS, custom Agilent, and TruSight RNA Fusion;
-- FASTQ and samplesheet validation;
-- Docker stub execution validated for all three assay designs;
-- TruSight BED liftover from hg19 to hg38;
-- local unit-test suite with 17 passing tests.
-
-Initial real-data runs still require review before clinical use or final acceptance limits are defined.
+The pipeline does not call fusions, perform differential expression, or provide clinical interpretation. Fusion readiness is a technical suitability indicator only.
 
 ## Requirements
 
-- Linux;
-- Nextflow `>=24.10`;
-- Docker ou Singularity/Apptainer;
-- at least 32 GB RAM for STAR; 48 GB is recommended for GRCh38;
-- sufficient space for FASTQs, indexes, BAMs, and reports;
-- Python 3.12 for development and testing.
+- Linux
+- Nextflow `>=24.10`
+- Docker or Singularity/Apptainer
+- 32 GB RAM minimum; 48 GB recommended for GRCh38 STAR alignment
+- Python 3.12 for development and tests
 
-Containers are defined in [`nextflow.config`](nextflow.config). The first run may download images from Quay.io.
-
-## Repository layout
-
-```text
-main.nf                    entrada do pipeline
-workflows/                 workflow principal
-subworkflows/              FASTQ, alignment, expression, panel, and reporting blocks
-modules/local/             project-specific processes
-modules/nf-core/           wrappers de ferramentas
-bin/                       Python parsers, validators, and reports
-conf/                      configuration and thresholds
-assets/                    MultiQC configuration, logo, and helper gene lists
-docs/                      metrics, outputs, and validation
-tests/                     unit tests and stub data
-real_data/                 validation samplesheets and references
-```
-
-## Samplesheet
-
-FASTQ:
-
-```csv
-sample,fastq_1,fastq_2,group,batch,assay
-SAMPLE01,reads/SAMPLE01_R1.fastq.gz,reads/SAMPLE01_R2.fastq.gz,grupo1,lote1,transcriptome
-```
-
-BAM:
-
-```csv
-sample,bam,group,batch,assay
-SAMPLE01,bam/SAMPLE01.bam,grupo1,lote1,transcriptome
-```
-
-The validator checks duplicate names, missing files, extensions, BAM indexes, required fields, assay type, and consistency with run parameters.
-
-## References
-
-FASTQ runs require a FASTA, contig-compatible GTF, STAR index, `refFlat` for transcriptome assays, and an assay-specific BED for panels. Do not mix hg19 and hg38 BED files.
-
-The included TruSight BED was converted to hg38 with the UCSC chain; 12 unmapped hg19 intervals are preserved in `real_data/references/`.
+Tool containers are pinned in [`nextflow.config`](nextflow.config).
 
 ## Real-data profiles
 
-### WTS transcriptome
-
-Perfil: [`conf/real_wts.config`](conf/real_wts.config)
-
 ```bash
-nextflow run main.nf -c conf/real_wts.config -profile docker -resume
-```
+# WTS transcriptome
+nextflow run main.nf -c conf/real_wts.config -profile docker --skip_rseqc true -resume
 
-### Custom Agilent panel
-
-Perfil: [`conf/real_agilent.config`](conf/real_agilent.config). BED: [`real_data/references/custom_agilent.bed`](real_data/references/custom_agilent.bed).
-
-```bash
+# Custom Agilent panel
 nextflow run main.nf -c conf/real_agilent.config -profile docker -resume
-```
 
-### TruSight RNA Fusion
-
-Profile: [`conf/real_trusight.config`](conf/real_trusight.config). It uses the hg38-converted BED and the TruSight gene list.
-
-```bash
+# TruSight RNA Fusion
 nextflow run main.nf -c conf/real_trusight.config -profile docker -resume
 ```
 
-Para uma nova rodada, copie o perfil correspondente e ajuste `input`, `outdir`, `targets` e o samplesheet. Não reutilize o BED de outro painel.
+For a new run, copy the matching profile and update the samplesheet, input paths, output directory, and panel BED. Do not mix BED files from different reference builds or panels.
 
 ## Generic execution
 
@@ -112,53 +53,71 @@ nextflow run main.nf \
   --star_index star_index --outdir results -profile docker
 ```
 
-For panels, add `--panel_type hybrid_capture` or `--panel_type amplicon` and `--targets panel_targets.hg38.bed`.
+For panels, also provide `--panel_type hybrid_capture` or `--panel_type amplicon` and `--targets panel_targets.hg38.bed`.
 
-Before a heavy run, use `-stub-run`. Use `-resume` to continue an interrupted run and a new `outdir` for a new analysis.
+Use `-stub-run` before a heavy run and `-resume` to continue an interrupted run.
 
 ## Outputs
 
-```text
-results/
-├── fastqc/                 qualidade bruta e pós-trimming
-├── fastp/                  reads filtrados e métricas JSON/HTML
-├── alignment/              BAM, STAR logs, junctions e quimerismos
-├── bam_qc/                 samtools flagstat/stats
-├── picard/                 duplicação e métricas RNA-seq
-├── expression/             featureCounts, matriz e métricas
-├── housekeeping/           métricas de genes housekeeping
-├── panel_qc/               profundidade por alvo e thresholds
-├── fusion_readiness/       indicadores técnicos de fusão
-├── sample_reports/         relatório HTML por amostra
-├── json/                   classificação detalhada
-├── tables/                 tabelas consolidadas TSV
-├── multiqc/                relatório MultiQC
-└── pipeline_info/          DAG, trace, timeline e metadata
+Each run produces:
+
+- aligned BAM and BAI;
+- FastQC, fastp, STAR, samtools, and Picard metrics;
+- expression and internal-control metrics;
+- panel depth, on-target percentage, and target coverage;
+- JSON classification and per-sample HTML report;
+- MultiQC report;
+- execution trace, timeline, DAG, and `software_versions.yml`.
+
+### HTML report languages
+
+English reports are generated by default. To generate a Portuguese report from a sample QC JSON file:
+
+```bash
+python3 bin/generate_sample_report.py \
+  --language pt \
+  --input results/sample/json/SAMPLE.qc.json \
+  --output results/sample/sample_reports/SAMPLE.qc.pt.html
 ```
 
-Consulte [`docs/output.md`](docs/output.md) e [`docs/metrics.md`](docs/metrics.md).
+The Portuguese report uses `lang="pt-BR"`, translates statuses and interpretation text, preserves the embedded HCB logo, and keeps the same metric-level threshold visualization as the English report.
+
+See [`docs/output.md`](docs/output.md) and [`docs/metrics.md`](docs/metrics.md).
 
 ## Interpretation
 
-- `PASS`: métricas avaliáveis sem falha crítica;
-- `WARNING`: sem falha crítica, mas com alertas;
-- `FAIL`: pelo menos uma métrica crítica falhou;
-- `NOT_EVALUATED`: informação insuficiente.
+- `PASS`: all evaluable metrics passed;
+- `WARNING`: no critical failure, but one or more alerts are present;
+- `FAIL`: at least one critical metric failed;
+- `NOT_EVALUATED`: insufficient information for evaluation.
 
-Os thresholds em [`conf/thresholds.yaml`](conf/thresholds.yaml) são valores iniciais. Duplicação, housekeeping e reads quiméricos devem ser interpretados conforme o desenho do painel. Reads quiméricos isolados não demonstram uma fusão.
+Panel internal controls are genes selected for strong target capture. They are not universal housekeeping genes. Thresholds in [`conf/thresholds.yaml`](conf/thresholds.yaml) are initial operating limits and require validation with a larger cohort.
 
-## Testing and development
+Technical `PASS` does not imply clinical or biological suitability. Chimeric reads alone do not demonstrate a fusion.
+
+## Testing
 
 ```bash
 /home/bioinfo/miniconda3/bin/python3 -m pytest -q
+nextflow run main.nf -profile test -stub-run
 ```
 
-Novos processos ficam em `modules/local/`, wrappers em `modules/nf-core/`, parsers em `bin/`, classificação em `conf/thresholds.yaml` e fluxos em `subworkflows/`. Toda mudança em parser deve incluir fixture/teste.
+Parser changes must include fixtures or tests. See [`docs/validation.md`](docs/validation.md) for validation principles.
 
-## Limitations
+## Repository layout
 
-Os primeiros runs reais ainda precisam de revisão de logs e parsers; alguns campos avançados permanecem `NA`; fusion readiness não substitui caller de fusão; thresholds não são limites clínicos universais; `PASS` técnico não equivale a adequação clínica ou biológica.
+```text
+main.nf                    pipeline entry point
+workflows/                 top-level workflows
+subworkflows/              FASTQ, alignment, expression, panel, and reporting
+modules/                   local and tool modules
+bin/                       parsers, validators, and report generation
+conf/                      profiles and thresholds
+assets/                    reference lists and report assets
+tests/                     unit tests and stub data
+real_data/                 validation samples and references
+```
 
-## License and citations
+## License
 
-Consulte [`LICENSE`](LICENSE), [`CITATIONS.md`](CITATIONS.md) e [`CHANGELOG.md`](CHANGELOG.md).
+See [`LICENSE`](LICENSE), [`CITATIONS.md`](CITATIONS.md), and [`CHANGELOG.md`](CHANGELOG.md).

@@ -1,0 +1,13 @@
+sample,fastq_1,fastq_2,group,batch,assay
+1565BM1,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/1565BM1_S1_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/1565BM1_S1_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6533BM1,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6533BM1_S2_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6533BM1_S2_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+7067BM1,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/7067BM1_S3_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/7067BM1_S3_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6870BM1,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6870BM1_S4_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6870BM1_S4_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6800BM1,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6800BM1_S5_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6800BM1_S5_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6243,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6243_S6_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6243_S6_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6575,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6575_S7_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6575_S7_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6586,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6586_S8_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6586_S8_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6791,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6791_S9_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6791_S9_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+5496FT3,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/5496FT3_S10_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/5496FT3_S10_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+5744FT1,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/5744FT1_S11_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/5744FT1_S11_L001_R2_001.fastq.gz,agilent,2026-07-16,panel
+6515FT1,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6515FT1_S12_L001_R1_001.fastq.gz,/home/bioinfo/45-Agilent_Custom RNA 16_07_2026/6515FT1_S12_L001_R2_001.fastq.gz,agilent,2026-07-16,panel

@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import re
+import subprocess
 from pathlib import Path
 
 
@@ -30,7 +32,20 @@ def main() -> None:
         "junction_saturation",
         "fusion_readiness_status",
     ]
-    values = [args.sample, "YES", "NA", "NA", "NA", "NA", "NA", "NOT_EVALUATED"]
+    try:
+        stats = subprocess.run(["samtools", "stats", str(args.bam)], check=True, capture_output=True, text=True).stdout
+        flagstat = subprocess.run(["samtools", "view", "-c", "-f", "2048", str(args.bam)], check=True, capture_output=True, text=True).stdout.strip()
+        def sn(name: str) -> str:
+            match = re.search(rf"^SN\t{name}:\t([^\n]+)", stats, re.MULTILINE)
+            return match.group(1).strip() if match else "NA"
+        read_length = sn("average length")
+        insert_size = sn("insert size average")
+        total = float(sn("raw total sequences")) if sn("raw total sequences") != "NA" else 0
+        chimeric = int(flagstat or 0)
+        chimeric_pct = round(chimeric * 100 / total, 4) if total else "NA"
+        values = [args.sample, "YES", read_length, insert_size, str(chimeric), str(chimeric_pct), "NA", "PASS"]
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        values = [args.sample, "YES", "NA", "NA", "NA", "NA", "NA", "NOT_EVALUATED"]
     Path(args.output).write_text("\t".join(headers) + "\n" + "\t".join(values) + "\n")
 
 

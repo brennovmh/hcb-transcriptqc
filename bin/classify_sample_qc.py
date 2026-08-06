@@ -97,7 +97,7 @@ def evaluate_metric(value: Any, spec: dict[str, Any]) -> str:
     return "NOT_EVALUATED"
 
 
-def overall_status(metric_statuses: dict[str, str], threshold_block: dict[str, Any]) -> tuple[str, list[str], list[str], list[str]]:
+def overall_status(metric_statuses: dict[str, str], threshold_block: dict[str, Any], require_complete: bool = False) -> tuple[str, list[str], list[str], list[str]]:
     warnings = [key for key, value in metric_statuses.items() if value == "WARNING"]
     failures = [key for key, value in metric_statuses.items() if value == "FAIL"]
     not_evaluated = [key for key, value in metric_statuses.items() if value == "NOT_EVALUATED"]
@@ -106,6 +106,11 @@ def overall_status(metric_statuses: dict[str, str], threshold_block: dict[str, A
         return "FAIL", warnings, failures, not_evaluated
     if warnings or failures:
         return "WARNING", warnings, failures, not_evaluated
+    # A sample cannot be approved when one or more required QC indicators
+    # could not be evaluated. This prevents a partial metric set (for
+    # example, a single passing value) from producing an unjustified PASS.
+    if require_complete and not_evaluated:
+        return "NOT_EVALUATED", warnings, failures, not_evaluated
     if metric_statuses:
         return "PASS", warnings, failures, not_evaluated
     return "NOT_EVALUATED", warnings, failures, not_evaluated
@@ -135,7 +140,7 @@ def main() -> None:
                 "threshold_fail": spec.get("fail"),
                 "critical": spec.get("critical", False),
             }
-        status, warnings, failures, not_evaluated = overall_status(metric_statuses, threshold_block)
+        status, warnings, failures, not_evaluated = overall_status(metric_statuses, threshold_block, require_complete=args.assay == "panel")
         payload = {
             "sample": sample,
             "assay": row["assay"],
