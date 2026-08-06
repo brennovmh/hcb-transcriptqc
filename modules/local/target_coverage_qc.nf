@@ -4,7 +4,7 @@ process TARGET_COVERAGE_QC {
     publishDir "${params.outdir}/panel_qc", mode: params.publish_mode
 
     input:
-    tuple val(meta), path(regions_bed_gz), path(summary_txt), path(thresholds_bed_gz)
+    tuple val(meta), path(bam), path(bai), path(regions_bed_gz), path(summary_txt), path(thresholds_bed_gz)
 
     output:
     path("${meta.id}.panel_metrics.tsv"), emit: metrics
@@ -14,6 +14,8 @@ process TARGET_COVERAGE_QC {
     python3 ${projectDir}/bin/calculate_target_coverage.py \
       --sample ${meta.id} \
       --regions ${regions_bed_gz} \
+      --bam ${bam} \
+      --targets ${params.targets} \
       --panel-type ${params.panel_type} \
       --output ${meta.id}.panel_metrics.tsv
     """

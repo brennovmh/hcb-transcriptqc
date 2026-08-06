@@ -37,14 +37,32 @@ def merge_metrics(paths: list[str]) -> pd.DataFrame:
         if not path_obj.exists() or path_obj.name.startswith("NO_"):
             continue
         frame = pd.read_csv(path_obj, sep="\t")
+        # Keep pre-alignment fastp duplication separate from the final QC
+        # duplication metric. The classification field is reserved for the
+        # post-alignment Picard estimate.
+        if "fastp_metrics" in path_obj.name and "duplication_percent" in frame.columns:
+            frame = frame.rename(columns={"duplication_percent": "fastp_duplication_percent"})
         if "sample" in frame.columns:
             frames.append(frame)
     if not frames:
         return pd.DataFrame(columns=["sample"])
-    # Each process emits one row per sample, so concatenate and collapse
-    # repeated metric columns rather than merging identical schemas.
+    # Each process emits one row per sample.  Prefer the last non-null value
+    # when a metric is emitted by more than one QC stage: alignment-derived
+    # metrics (e.g. Picard duplication) arrive after pre-alignment fastp
+    # metrics and are the appropriate values for final classification.
     result = pd.concat(frames, ignore_index=True, sort=False)
-    return result.groupby("sample", as_index=False, sort=False).first()
+    grouped = result.groupby("sample", as_index=False, sort=False)
+    rows = []
+    for sample, frame in grouped:
+        row = {"sample": sample}
+        for column in result.columns:
+            if column == "sample":
+                continue
+            values = frame[column].dropna()
+            if not values.empty:
+                row[column] = values.iloc[-1]
+        rows.append(row)
+    return pd.DataFrame(rows)
 
 
 def evaluate_metric(value: Any, spec: dict[str, Any]) -> str:
@@ -124,6 +142,16 @@ def main() -> None:
             "batch": row.get("batch", ""),
             "overall_status": status,
             "classification_assay_type": args.assay if args.assay == "transcriptome" else f"panel_{args.panel_type}",
+            "housekeeping_interpretation": (
+                "Canonical housekeeping genes assessed against the transcriptome reference."
+                if args.assay == "transcriptome"
+                else "Panel-specific internal expression controls selected for strong target capture; they are not universal housekeeping genes."
+            ),
+            "internal_control_details": {
+                "detected_genes": str(row.get("housekeeping_detected_genes", "")),
+                "gene_counts": str(row.get("housekeeping_gene_counts", "")),
+                "expected": row.get("housekeeping_expected", "NA"),
+            },
             "metrics": metric_map,
             "warnings": warnings,
             "failures": failures,

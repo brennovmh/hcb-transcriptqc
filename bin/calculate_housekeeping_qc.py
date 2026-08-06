@@ -16,6 +16,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--metadata", required=True)
     parser.add_argument("--housekeeping", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--annotation", default="")
     return parser.parse_args()
 
 
@@ -30,12 +31,68 @@ def main() -> None:
     metadata = pd.read_csv(args.metadata)
     hk = pd.read_csv(args.housekeeping, sep="\t")
     genes = [gene for gene in hk["gene"].dropna().astype(str).tolist() if gene]
+    symbols = {}
+    if args.annotation:
+        import re
+        for line in Path(args.annotation).open():
+            if "gene_id \"" not in line or "gene_name \"" not in line:
+                continue
+            gid = re.search(r'gene_id "([^"]+)"', line)
+            gname = re.search(r'gene_name "([^"]+)"', line)
+            if gid and gname:
+                symbols[gid.group(1)] = gname.group(1)
     if not genes:
-        raise SystemExit("No valid housekeeping genes were provided")
+        sample_columns = [column for column in matrix.columns if column != "gene"]
+        rows = [{
+            "sample": sample,
+            "housekeeping_expected": 0,
+            "housekeeping_detected": 0,
+            "housekeeping_detected_percent": math.nan,
+            "housekeeping_mean_count": math.nan,
+            "housekeeping_median_count": math.nan,
+            "housekeeping_min_count": math.nan,
+            "housekeeping_max_count": math.nan,
+            "housekeeping_mean_cpm": math.nan,
+            "housekeeping_below_limit": math.nan,
+            "housekeeping_cv": math.nan,
+            "housekeeping_iqr": math.nan,
+            "housekeeping_outlier": "NOT_EVALUATED",
+            "housekeeping_detected_genes": "",
+            "housekeeping_gene_counts": "",
+            "batch": "",
+            "housekeeping_sample_zscore": "NA",
+        } for sample in sample_columns]
+        pd.DataFrame(rows).to_csv(args.output, sep="\t", index=False)
+        return
 
     subset = matrix[matrix["gene"].isin(genes)].copy()
     if subset.empty:
-        raise SystemExit("None of the housekeeping genes were found in the expression matrix")
+        # GTFs may expose Ensembl gene IDs while the housekeeping list uses
+        # symbols. Preserve the report with an explicit unevaluable result;
+        # failing the whole run would hide the alignment and expression QC.
+        sample_columns = [column for column in matrix.columns if column != "gene"]
+        rows = []
+        for sample in sample_columns:
+            batch = metadata.loc[metadata["sample"] == sample, "batch"]
+            rows.append({
+                "sample": sample,
+                "housekeeping_expected": len(genes),
+                "housekeeping_detected": 0,
+                "housekeeping_detected_percent": math.nan,
+                "housekeeping_mean_count": math.nan,
+                "housekeeping_median_count": math.nan,
+                "housekeeping_min_count": math.nan,
+                "housekeeping_max_count": math.nan,
+                "housekeeping_mean_cpm": math.nan,
+                "housekeeping_below_limit": math.nan,
+                "housekeeping_cv": math.nan,
+                "housekeeping_iqr": math.nan,
+                "housekeeping_outlier": "NOT_EVALUATED",
+                "batch": batch.iloc[0] if not batch.empty else "",
+                "housekeeping_sample_zscore": "NA",
+            })
+        pd.DataFrame(rows).to_csv(args.output, sep="\t", index=False)
+        return
 
     sample_columns = [column for column in matrix.columns if column != "gene"]
     rows = []
@@ -58,6 +115,8 @@ def main() -> None:
             "housekeeping_cv": round(values.std(ddof=0) / values.mean(), 6) if values.mean() else math.nan,
             "housekeeping_iqr": round(values.quantile(0.75) - values.quantile(0.25), 3),
             "housekeeping_outlier": "NO",
+            "housekeeping_detected_genes": ",".join(symbols.get(str(g), str(g)) for g, v in zip(subset["gene"], values) if v >= 1),
+            "housekeeping_gene_counts": ";".join(f"{symbols.get(str(g), str(g))}:{v:g}" for g, v in zip(subset["gene"], values)),
         }
         batch = metadata.loc[metadata["sample"] == sample, "batch"]
         row["batch"] = batch.iloc[0] if not batch.empty else ""

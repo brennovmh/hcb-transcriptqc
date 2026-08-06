@@ -1,6 +1,6 @@
 process PICARD_COLLECT_RNASEQ_METRICS_MODULE {
     tag "${meta.id}"
-    label 'process_medium'
+    label 'process_high_memory'
     publishDir "${params.outdir}/picard", mode: params.publish_mode
 
     input:
@@ -11,7 +11,7 @@ process PICARD_COLLECT_RNASEQ_METRICS_MODULE {
 
     script:
     """
-    picard CollectRnaSeqMetrics \
+    java -Xmx28g -jar /usr/local/share/picard-3.4.0-0/picard.jar CollectRnaSeqMetrics \
       I=${bam} \
       O=${meta.id}.rnaseq_metrics.txt \
       REF_FLAT=${params.ref_flat ?: params.gtf} \

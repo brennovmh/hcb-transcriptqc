@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import gzip
+import subprocess
 from pathlib import Path
 from statistics import median
 from typing import TextIO
@@ -14,6 +15,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--sample", required=True)
     parser.add_argument("--regions", required=True)
+    parser.add_argument("--bam", required=False)
+    parser.add_argument("--targets", required=False)
     parser.add_argument("--panel-type", required=True)
     parser.add_argument("--output", required=True)
     return parser.parse_args()
@@ -75,7 +78,13 @@ def main() -> None:
             500: sum(depth >= 500 for depth in depths) * 100 / len(depths),
             1000: sum(depth >= 1000 for depth in depths) * 100 / len(depths),
         }
-        values = [args.sample, args.panel_type, "NA", round(median(depths), 3), round(mean, 3), round(thresholds[20], 3), round(thresholds[50], 3), round(thresholds[100], 3), round(thresholds[500], 3), round(thresholds[1000], 3), sum(depth == 0 for depth in depths)]
+        on_target = "NA"
+        if args.bam and args.targets:
+            total = subprocess.check_output(["samtools", "view", "-c", "-F", "4", args.bam], text=True).strip()
+            targeted = subprocess.check_output(["samtools", "view", "-c", "-F", "4", "-L", args.targets, args.bam], text=True).strip()
+            if int(total) > 0:
+                on_target = round(int(targeted) * 100 / int(total), 3)
+        values = [args.sample, args.panel_type, on_target, round(median(depths), 3), round(mean, 3), round(thresholds[20], 3), round(thresholds[50], 3), round(thresholds[100], 3), round(thresholds[500], 3), round(thresholds[1000], 3), sum(depth == 0 for depth in depths)]
     Path(args.output).write_text("\t".join(headers) + "\n" + "\t".join(map(str, values)) + "\n")
 
 

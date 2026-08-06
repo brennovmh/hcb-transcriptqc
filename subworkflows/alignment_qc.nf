@@ -11,9 +11,11 @@ workflow ALIGNMENT_QC {
     bams
 
     main:
+    // STAR writes Log.final.out alongside the published BAM. Resolve it
+    // from the configured output directory rather than the transient BAM
+    // symlink directory, which may not contain the report file.
     star_logs = bams.map { meta, bam, bai ->
-        def log = file("${bam.parent}/${meta.id}.Log.final.out")
-        tuple(meta, log)
+        tuple(meta, file("${params.outdir}/alignment/${meta.id}.Log.final.out"))
     }.filter { meta, log -> log.exists() }
 
     PARSE_STAR_LOG(star_logs)

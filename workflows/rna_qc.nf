@@ -6,6 +6,7 @@ include { PANEL_QC } from '../subworkflows/panel_qc'
 include { EXPRESSION_QC } from '../subworkflows/expression_qc'
 include { FUSION_READINESS_QC } from '../subworkflows/fusion_readiness_qc'
 include { REPORTING } from '../subworkflows/reporting'
+include { SOFTWARE_VERSIONS } from '../modules/local/software_versions'
 
 workflow RNA_QC {
     main:
@@ -60,4 +61,5 @@ workflow RNA_QC {
         panel_outputs?.panel_metrics ?: Channel.of(file("${projectDir}/assets/NO_PANEL")),
         fusion_outputs.fusion_metrics
     )
+    SOFTWARE_VERSIONS()
 }

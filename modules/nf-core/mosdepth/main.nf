@@ -8,7 +8,7 @@ process MOSDEPTH_MODULE {
     path(targets_bed)
 
     output:
-    tuple val(meta), path("${meta.id}.regions.bed.gz"), path("${meta.id}.mosdepth.summary.txt"), path("${meta.id}.thresholds.bed.gz")
+    tuple val(meta), path(bam), path(bai), path("${meta.id}.regions.bed.gz"), path("${meta.id}.mosdepth.summary.txt"), path("${meta.id}.thresholds.bed.gz")
 
     script:
     """

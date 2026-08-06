@@ -28,10 +28,13 @@ def read_metrics(path: Path) -> dict[str, str]:
     raise SystemExit(f"Picard RNA-seq metrics table not found: {path}")
 
 
-def percent(row: dict[str, str], column: str) -> float:
+def percent(row: dict[str, str], column: str) -> float | str:
+    value = row.get(column, "NA")
+    if value in {"", "NA", "NaN", "nan"}:
+        return "NA"
     try:
-        return round(float(row[column]) * 100, 3)
-    except (KeyError, ValueError) as exc:
+        return round(float(value) * 100, 3)
+    except ValueError as exc:
         raise SystemExit(f"invalid {column} in Picard RNA-seq metrics") from exc
 
 
@@ -46,13 +49,11 @@ def main() -> None:
         "utr_percent": percent(row, "PCT_UTR_BASES"),
         "intronic_percent": percent(row, "PCT_INTRONIC_BASES"),
         "intergenic_percent": percent(row, "PCT_INTERGENIC_BASES"),
-        "exonic_percent": round(
-            (
-                float(row["PCT_CODING_BASES"])
-                + float(row["PCT_UTR_BASES"])
-            )
-            * 100,
-            3,
+        "exonic_percent": (
+            round((float(row["PCT_CODING_BASES"]) + float(row["PCT_UTR_BASES"])) * 100, 3)
+            if row.get("PCT_CODING_BASES") not in {"", "NA"}
+            and row.get("PCT_UTR_BASES") not in {"", "NA"}
+            else "NA"
         ),
         "gene_body_3prime_bias": row.get("MEDIAN_3PRIME_BIAS", "NA"),
         "gene_body_5prime_bias": row.get("MEDIAN_5PRIME_BIAS", "NA"),

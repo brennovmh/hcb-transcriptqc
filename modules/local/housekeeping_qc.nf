@@ -16,6 +16,7 @@ process HOUSEKEEPING_QC {
       --matrix ${matrix_tsv} \
       --metadata ${metadata_csv} \
       --housekeeping ${params.housekeeping_genes} \
+      --annotation ${params.gtf} \
       --output housekeeping_metrics.tsv
     """
 }

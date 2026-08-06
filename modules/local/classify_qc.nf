@@ -25,5 +25,8 @@ process CLASSIFY_QC {
       --assay ${params.assay} \
       ${params.panel_type ? "--panel-type ${params.panel_type}" : ""} \
       --inputs ${inputs}
+    # Changes to the classification schema must invalidate the Nextflow task
+    # cache even when the external Python helper keeps the same command line.
+    echo 'classification_schema_v2' > .classification_schema
     """
 }

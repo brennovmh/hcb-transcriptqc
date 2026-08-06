@@ -5,7 +5,7 @@ include { GTF_TO_BED12 } from '../modules/local/gtf_to_bed12'
 
 process RSEQC_TRANSCRIPTOME {
     tag "${meta.id}"
-    label 'process_medium'
+    label 'process_high_memory'
     publishDir "${params.outdir}/rseqc", mode: params.publish_mode
 
     input:
@@ -23,11 +23,17 @@ process RSEQC_TRANSCRIPTOME {
     """
     infer_experiment.py -i ${bam} -r ${bed12} > ${meta.id}.infer_experiment.txt
     read_distribution.py -i ${bam} -r ${bed12} > ${meta.id}.read_distribution.txt
-    junction_annotation.py -i ${bam} -r ${bed12} -o ${meta.id}.junction_annotation
-    junction_saturation.py -i ${bam} -r ${bed12} -o ${meta.id}.junction_saturation
+    # Some RSeQC versions cannot parse valid junctions containing extra
+    # delimiters. Keep the rest of the transcriptome QC usable and mark only
+    # junction annotation as unavailable when that tool fails.
+    junction_annotation.py -i ${bam} -r ${bed12} -o ${meta.id}.junction_annotation > ${meta.id}.junction_annotation.log 2>&1 || true
+    test -s ${meta.id}.junction_annotation.junction.xls || touch ${meta.id}.junction_annotation.junction.xls
+    junction_saturation.py -i ${bam} -r ${bed12} -o ${meta.id}.junction_saturation > ${meta.id}.junction_saturation.log 2>&1 || true
+    test -s ${meta.id}.junction_saturation.r || touch ${meta.id}.junction_saturation.r
     read_duplication.py -i ${bam} -o ${meta.id}.read_duplication
     tin.py -i ${bam} -r ${bed12} > ${meta.id}.tin.txt
-    geneBody_coverage.py -i ${bam} -r ${bed12} -o ${meta.id}.geneBodyCoverage
+    geneBody_coverage.py -i ${bam} -r ${bed12} -o ${meta.id}.geneBodyCoverage > ${meta.id}.geneBodyCoverage.log 2>&1 || true
+    test -s ${meta.id}.geneBodyCoverage.geneBodyCoverage.txt || touch ${meta.id}.geneBodyCoverage.geneBodyCoverage.txt
     python3 ${projectDir}/bin/summarize_rseqc.py \
       --sample ${meta.id} \
       --infer ${meta.id}.infer_experiment.txt \

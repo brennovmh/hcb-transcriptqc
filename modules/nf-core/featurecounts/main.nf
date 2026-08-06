@@ -8,12 +8,13 @@ process FEATURECOUNTS_MODULE {
 
     output:
     path("${meta.id}.featurecounts.txt"), emit: counts
-    path("${meta.id}.featurecounts.summary"), emit: summary
+    path("${meta.id}.featurecounts.txt.summary"), emit: summary
 
     script:
     """
     featureCounts \
       -T ${task.cpus} \
+      -p \
       -a ${params.gtf} \
       -o ${meta.id}.featurecounts.txt \
       ${bam}
@@ -22,6 +23,6 @@ process FEATURECOUNTS_MODULE {
     stub:
     """
     printf "Geneid\tChr\tStart\tEnd\tStrand\tLength\t${meta.id}\nACTB\tchr1\t1\t10\t+\t10\t100\nGAPDH\tchr1\t11\t20\t+\t10\t80\nHPRT1\tchr1\t21\t30\t+\t10\t50\n" > ${meta.id}.featurecounts.txt
-    printf "Status\t${meta.id}\nAssigned\t230\nUnassigned_NoFeatures\t10\nUnassigned_Ambiguity\t5\n" > ${meta.id}.featurecounts.summary
+    printf "Status\t${meta.id}\nAssigned\t230\nUnassigned_NoFeatures\t10\nUnassigned_Ambiguity\t5\n" > ${meta.id}.featurecounts.txt.summary
     """
 }

@@ -7,7 +7,7 @@ process STAR_ALIGN {
     tuple val(meta), path(r1), path(r2)
 
     output:
-    tuple val(meta), path("${meta.id}.sorted.bam"), path("${meta.id}.sorted.bam.bai"), emit: bam
+    tuple val(meta), path("${meta.id}.sorted.bam"), emit: bam
     tuple val(meta), path("${meta.id}.Log.final.out"), path("${meta.id}.SJ.out.tab"), path("${meta.id}.Chimeric.out.junction"), path("${meta.id}.ReadsPerGene.out.tab"), emit: reports
 
     script:
@@ -20,6 +20,7 @@ process STAR_ALIGN {
       --outFileNamePrefix ${meta.id}. \
       --outSAMtype BAM SortedByCoordinate \
       --outSAMattributes NH HI AS nM NM MD ch \
+      --outSAMattrRGline ID:${meta.id} SM:${meta.id} LB:${meta.id} PL:ILLUMINA \
       --outSAMstrandField intronMotif \
       --quantMode GeneCounts \
       --chimOutType Junctions SeparateSAMold \
@@ -34,12 +35,11 @@ process STAR_ALIGN {
       --alignIntronMax ${params.star_alignIntronMax} \
       --alignSJstitchMismatchNmax ${params.star_alignSJstitchMismatchNmax}
     mv ${meta.id}.Aligned.sortedByCoord.out.bam ${meta.id}.sorted.bam
-    samtools index ${meta.id}.sorted.bam
     """
 
     stub:
     """
-touch ${meta.id}.sorted.bam ${meta.id}.sorted.bam.bai
+touch ${meta.id}.sorted.bam
 cat > ${meta.id}.Log.final.out <<'EOF'
                             Number of input reads | 200
                     Uniquely mapped reads number | 160
