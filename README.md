@@ -1,4 +1,4 @@
-# Trancript-QC
+# Transcript-QC
 
 <p align="center"><img src="assets/rna-qc-logo.svg" width="180" alt="RNA-QC logo"></p>
 <p align="center"><strong>Reproducible technical QC for RNA-seq, WTS, and targeted RNA panels.</strong></p>
