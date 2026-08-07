@@ -37,6 +37,11 @@ def merge_metrics(paths: list[str]) -> pd.DataFrame:
         if not path_obj.exists() or path_obj.name.startswith("NO_"):
             continue
         frame = pd.read_csv(path_obj, sep="\t")
+        # Preserve sample identifiers such as "6243" as strings. Pandas
+        # otherwise infers numeric-only IDs as integers, causing them not to
+        # match the metadata sample column during the final merge.
+        if "sample" in frame.columns:
+            frame["sample"] = frame["sample"].astype(str)
         # Keep pre-alignment fastp duplication separate from the final QC
         # duplication metric. The classification field is reserved for the
         # post-alignment Picard estimate.
@@ -118,10 +123,11 @@ def overall_status(metric_statuses: dict[str, str], threshold_block: dict[str, A
 
 def main() -> None:
     args = parse_args()
-    metadata = pd.read_csv(args.metadata)
+    metadata = pd.read_csv(args.metadata, dtype={"sample": str})
     thresholds = yaml.safe_load(Path(args.thresholds).read_text())
     threshold_block = pick_threshold_block(args, thresholds)
     metrics = merge_metrics(args.inputs)
+    metadata["sample"] = metadata["sample"].astype(str)
     merged = metadata.merge(metrics, on="sample", how="left")
 
     for _, row in merged.iterrows():
