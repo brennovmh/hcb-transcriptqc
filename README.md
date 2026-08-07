@@ -1,13 +1,9 @@
 # Transcript-QC
 
-<<<<<<< HEAD
 <p align="center"><img src="assets/rna-qc-logo.svg" width="180" alt="RNA-QC logo"></p>
 <p align="center"><strong>Reproducible technical QC for RNA-seq, WTS, and targeted RNA panels.</strong></p>
 
 <p align="center"><img alt="Nextflow DSL2" src="https://img.shields.io/badge/Nextflow-DSL2-0f766e"> <img alt="Docker" src="https://img.shields.io/badge/containers-Docker-2496ed">
-=======
-Reproducible technical QC for RNA-seq, WTS, and targeted RNA panels.
->>>>>>> 0690150 (Improve QC reports, thresholds, and reproducibility)
 
 ## Overview
 
@@ -31,15 +27,29 @@ Tool containers are pinned in [`nextflow.config`](nextflow.config).
 
 ## Real-data profiles
 
+The following commands use the repository profiles and write results to separate output directories. Update the samplesheet and reference paths when running a new cohort.
+
 ```bash
 # WTS transcriptome
-nextflow run main.nf -c conf/real_wts.config -profile docker --skip_rseqc true -resume
+nextflow run main.nf \
+  -c conf/real_wts.config -profile docker \
+  --input real_data/samplesheet_wts.csv \
+  --outdir real_data/results_wts \
+  --skip_rseqc true -resume
 
 # Custom Agilent panel
-nextflow run main.nf -c conf/real_agilent.config -profile docker -resume
+nextflow run main.nf \
+  -c conf/real_agilent.config -profile docker \
+  --input real_data/samplesheet_agilent_2026-07-16.csv \
+  --outdir real_data/results_agilent \
+  --skip_rseqc true -resume
 
 # TruSight RNA Fusion
-nextflow run main.nf -c conf/real_trusight.config -profile docker -resume
+nextflow run main.nf \
+  -c conf/real_trusight.config -profile docker \
+  --input real_data/samplesheet_trusight.csv \
+  --outdir real_data/results_trusight \
+  --skip_rseqc true -resume
 ```
 
 For a new run, copy the matching profile and update the samplesheet, input paths, output directory, and panel BED. Do not mix BED files from different reference builds or panels.
@@ -62,6 +72,7 @@ Use `-stub-run` before a heavy run and `-resume` to continue an interrupted run.
 Each run produces:
 
 - aligned BAM and BAI;
+- gene-level BAM files and FeatureCounts tables (`featurecounts.txt` and summary files) for downstream expression, fusion, and visualization analyses;
 - FastQC, fastp, STAR, samtools, and Picard metrics;
 - expression and internal-control metrics;
 - panel depth, on-target percentage, and target coverage;
